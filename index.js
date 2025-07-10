@@ -34,7 +34,7 @@ async function startBot() {
             const text = msg.message.conversation || msg.message.extendedTextMessage?.text;
 
             if(text?.toLowerCase().includes('contests')) {
-                const {getUpcomingContests} = require('.contestFetcher');
+                const {getUpcomingContests} = require('./contestFetcher'); 
                 const contests= await getUpcomingContests();
                 await sock.sendMessage(msg.key.remoteJid, {text:contests});
             }
