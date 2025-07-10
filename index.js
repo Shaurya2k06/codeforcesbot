@@ -1,17 +1,23 @@
-const {default: makeWASocket,DisconnectReason, useMultiFileAuthState} = require('@whiskeysockets/baileys');
-const {Boom} = require('@hapi/boom');
-const {startScheduler} = require('./scheduler');
-
+const { default: makeWASocket, DisconnectReason, useMultiFileAuthState } = require('@whiskeysockets/baileys');
+const { Boom } = require('@hapi/boom');
+const { startScheduler } = require('./scheduler');
+const qrcode = require('qrcode-terminal'); 
 async function startBot() {
-    const {state, saveCreds} = await useMultiFileAuthState('./auth');
+    const { state, saveCreds } = await useMultiFileAuthState('./auth');
 
     const sock = makeWASocket({
         auth: state,
-        printQRInTerminal: true
+        printQRInTerminal: false 
     });
 
     sock.ev.on('connection.update', (update) => {
-        const { connection, lastDisconnect } = update;
+        const { connection, lastDisconnect, qr } = update;
+        
+        
+        if (qr) {
+            qrcode.generate(qr, { small: true });
+            console.log('Scan the QR code above with WhatsApp');
+        }
         
         if (connection === 'close') {
             const shouldReconnect = (lastDisconnect.error)?.output?.statusCode !== DisconnectReason.loggedOut;

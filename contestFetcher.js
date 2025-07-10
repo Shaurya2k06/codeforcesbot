@@ -9,7 +9,7 @@ async function getUpcomingContests() {
         if (upcoming.length === 0) {
             return "Looks like theres no upcoming contests!"
         }
-        let message= "Upcoming Codeforces Contests:*\n\n";
+        let message= "*Upcoming Codeforces Contests:*\n\n";
       upcoming.forEach(contest => {
             const startTime = new Date(contest.startTimeSeconds * 1000);
             const duration = Math.floor(contest.durationSeconds / 3600);
